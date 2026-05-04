@@ -1,0 +1,20 @@
+#+ summary: Find rare diseases associated with a given HPO phenotype term (retrognathia example)
+#+ tags:
+#+ - rdkg
+
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX rdkg: <https://github.com/wangjl99/RDKG#>
+PREFIX schema: <http://schema.org/>
+
+SELECT DISTINCT ?disease ?diseaseName ?orphaId
+WHERE {
+  ?phenotype a rdkg:Phenotype ;
+             schema:identifier "HP:0000278" .
+  ?disease a rdkg:Disease ;
+           rdfs:label ?diseaseName ;
+           rdkg:HAS_PHENOTYPE ?phenotype .
+  OPTIONAL { ?disease schema:identifier ?orphaId .
+             FILTER(STRSTARTS(?orphaId, "ORPHA:")) }
+}
+ORDER BY ?diseaseName
+LIMIT 50
