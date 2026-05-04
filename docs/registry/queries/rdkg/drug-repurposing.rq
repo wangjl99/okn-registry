@@ -1,0 +1,22 @@
+#+ summary: Find drug repurposing candidates for a rare disease via shared gene associations
+#+ tags:
+#+ - rdkg
+
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX rdkg: <https://github.com/wangjl99/RDKG#>
+PREFIX schema: <http://schema.org/>
+
+SELECT DISTINCT ?diseaseName ?geneSymbol ?drugName ?drugId
+WHERE {
+  ?disease a rdkg:Disease ;
+           rdfs:label ?diseaseName ;
+           rdkg:ASSOCIATED_WITH_GENE ?gene .
+  ?gene a rdkg:Gene ;
+        rdkg:gene_symbol ?geneSymbol ;
+        rdkg:TARGETED_BY ?drug .
+  ?drug a rdkg:Drug ;
+        rdfs:label ?drugName ;
+        schema:identifier ?drugId .
+  FILTER(CONTAINS(LCASE(?diseaseName), "marfan"))
+}
+ORDER BY ?geneSymbol ?drugName
