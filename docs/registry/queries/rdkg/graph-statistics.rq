@@ -1,0 +1,19 @@
+#+ summary: Summary statistics for RDKG — count of diseases, phenotypes, genes, drugs, and variants
+#+ tags:
+#+ - rdkg
+
+PREFIX rdkg: <https://github.com/wangjl99/RDKG#>
+
+SELECT
+  (COUNT(DISTINCT ?disease) AS ?diseaseCount)
+  (COUNT(DISTINCT ?phenotype) AS ?phenotypeCount)
+  (COUNT(DISTINCT ?gene) AS ?geneCount)
+  (COUNT(DISTINCT ?drug) AS ?drugCount)
+  (COUNT(DISTINCT ?variant) AS ?variantCount)
+WHERE {
+  { ?disease a rdkg:Disease . }
+  UNION { ?phenotype a rdkg:Phenotype . }
+  UNION { ?gene a rdkg:Gene . }
+  UNION { ?drug a rdkg:Drug . }
+  UNION { ?variant a rdkg:Variant . }
+}
