@@ -1,0 +1,21 @@
+#+ summary: Identify rare diseases with no drug associations in RDKG (knowledge gap discovery)
+#+ tags:
+#+ - rdkg
+
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX rdkg: <https://github.com/wangjl99/RDKG#>
+PREFIX schema: <http://schema.org/>
+
+SELECT DISTINCT ?disease ?diseaseName ?orphaId
+WHERE {
+  ?disease a rdkg:Disease ;
+           rdfs:label ?diseaseName .
+  OPTIONAL { ?disease schema:identifier ?orphaId .
+             FILTER(STRSTARTS(?orphaId, "ORPHA:")) }
+  FILTER NOT EXISTS {
+    ?disease rdkg:TREATED_BY ?drug .
+    ?drug a rdkg:Drug .
+  }
+}
+ORDER BY ?diseaseName
+LIMIT 100
